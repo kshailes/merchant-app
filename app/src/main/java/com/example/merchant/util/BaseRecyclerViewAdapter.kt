@@ -8,9 +8,12 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.merchant.BR
 
-class CommonAdapter<T : ItemViewModel?>(var items: List<T>, itemClickListener: ItemClickListener<T>) :
+class CommonAdapter<T : ItemViewModel?>(
+    var items: List<T>,
+    itemClickListener: ItemClickListener<T>? = null
+) :
     RecyclerView.Adapter<CommonAdapter.ViewHolder<T>>() {
-    private val itemClickListener: ItemClickListener<T>
+    private var itemClickListener: ItemClickListener<T>? = null
     private var mLayoutInflater: LayoutInflater? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
         if (mLayoutInflater == null) {
@@ -35,10 +38,10 @@ class CommonAdapter<T : ItemViewModel?>(var items: List<T>, itemClickListener: I
         itemView!!
     ) {
         private val binding: ViewDataBinding?
-        fun bind(value: T, clickListener: ItemClickListener<T>) {
+        fun bind(value: T, clickListener: ItemClickListener<T>?) {
             binding!!.setVariable(BR.item, value)
             binding.root.setOnClickListener { v: View? ->
-                clickListener.onItemClick(
+                clickListener?.onItemClick(
                     value
                 )
             }
@@ -51,5 +54,6 @@ class CommonAdapter<T : ItemViewModel?>(var items: List<T>, itemClickListener: I
 
     init {
         this.itemClickListener = itemClickListener
+
     }
 }

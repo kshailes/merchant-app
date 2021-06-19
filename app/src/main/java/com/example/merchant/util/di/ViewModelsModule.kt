@@ -3,6 +3,7 @@ package com.example.merchant.util.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.merchant.MainActivityViewModel
+import com.example.merchant.additem.AddItemViewModel
 import com.example.merchant.menu.MenuViewModel
 import com.example.merchant.orders.OrderViewModel
 import com.example.merchant.profile.ProfileViewModel
@@ -45,4 +46,9 @@ abstract class ViewModelsModule {
     @IntoMap
     @ViewModelsKey(ProfileViewModel::class)
     abstract fun bindProfileViewModel(viewModel: ProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelsKey(AddItemViewModel::class)
+    abstract fun bindAddItemViewModel(viewModel: AddItemViewModel): ViewModel
 }

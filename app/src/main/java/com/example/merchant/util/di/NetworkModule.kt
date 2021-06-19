@@ -2,20 +2,21 @@ package com.example.merchant.util.di
 
 import android.content.Context
 import com.example.merchant.BuildConfig
+import com.example.merchant.networkapiservice.CommonApiService
+import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
-import okhttp3.CipherSuite
-import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
-import okhttp3.TlsVersion
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+
+private const val DEBUG_BASE_URL = "https://desolate-tundra-11009.herokuapp.com/"
 
 @Module
 object NetworkModule {
@@ -50,9 +51,9 @@ object NetworkModule {
 
     private fun getBaseUrl(): String {
         return if (BuildConfig.DEBUG) {
-            "ApiConstant.BASE_URL"
+            DEBUG_BASE_URL
         } else {
-            "ApiConstant.BASE_PROD_URL"
+            DEBUG_BASE_URL
         }
     }
 
@@ -61,5 +62,23 @@ object NetworkModule {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return httpLoggingInterceptor
+    }
+
+    @Provides
+    @Singleton
+    @JvmStatic
+    fun provideGson(): Gson {
+        return GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+            .setPrettyPrinting()
+            .setLenient()
+            .serializeNulls()
+            .create()
+    }
+
+    @Provides
+    @JvmStatic
+    fun provideCommonApiService(retrofit: Retrofit):CommonApiService {
+        return retrofit.create(CommonApiService::class.java)
     }
 }

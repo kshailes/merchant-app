@@ -1,5 +1,6 @@
 package com.example.merchant.menu
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.merchant.util.BaseViewModel
 import com.example.merchant.util.Event
@@ -7,9 +8,10 @@ import javax.inject.Inject
 
 class MenuViewModel @Inject constructor() : BaseViewModel() {
 
-    val addNewItemClickEvent = MutableLiveData<Event<Unit>>()
+    private val _addNewItemClickEvent = MutableLiveData<Event<Unit>>()
+    val addNewItemClickEvent: LiveData<Event<Unit>> = _addNewItemClickEvent
 
     fun addNewItemClick() {
-        addNewItemClickEvent.postValue(Event(Unit))
+        _addNewItemClickEvent.postValue(Event(Unit))
     }
 }

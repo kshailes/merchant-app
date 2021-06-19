@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Merchant</string>
     <string name="add_new_item">Add New Item</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="category">Category</string>
+    <string name="price_unit">Price/Unit</string>
+    <string name="unit">Unit</string>
+    <string name="save">Save</string>
+    <string name="rupee_symbol">₹</string>
+    <string name="description">Description</string>
 </resources>

@@ -1,22 +1,29 @@
 package com.example.merchant.util.Network
 
-sealed class NetworkResponse<out R> {
+import retrofit2.Response
 
-    data class Success<out T>(val data: T) : NetworkResponse<T>()
-    data class Error(val exception: Exception) : NetworkResponse<Nothing>()
-    object Loading : NetworkResponse<Nothing>()
-
-    override fun toString(): String {
-        return when (this) {
-            is Success<*> -> "Success[data=$data]"
-            is Error -> "Error[exception=$exception]"
-            Loading -> "Loading"
-        }
-    }
+sealed class Outcome<out T : Any> {
+    data class Success<out T : Any>(val data: T) : Outcome<T>()
+    data class Error(val error: GenericErrorResponse) : Outcome<Nothing>()
 }
 
-/**
- * `true` if [Result] is of type [Success] & holds non-null [Success.data].
- */
-val Result<*>.succeeded
-    get() = this is NetworkResponse.Success<*> && data != null
+suspend fun <T : Any> apiCall(call: suspend() -> Response<T>): Outcome<T> {
+    val response: Response<T>
+    try {
+        response = call.invoke()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return Outcome.Error(GenericErrorResponse("NETWORK_ERROR", ""))
+    }
+
+    return try {
+        if (response.isSuccessful) {
+            Outcome.Success(response.body()!!)
+        } else {
+            Outcome.Error(GenericErrorResponse("NETWORK_ERROR", ""))
+//            Outcome.Error(parseError(response.errorBody()))
+        }
+    } catch (e: Exception) {
+        return Outcome.Error(GenericErrorResponse("UNKNOWN_ERROR", ""))
+    }
+}

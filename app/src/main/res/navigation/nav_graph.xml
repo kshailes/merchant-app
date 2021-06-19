@@ -20,5 +20,10 @@
         android:name="com.example.merchant.menu.MenuFragment"
         android:label="Menu"
         tools:layout="@layout/fragment_menu"/>
+    <fragment
+        android:id="@+id/add_item_fragment"
+        android:name="com.example.merchant.additem.AddItemFragment"
+        android:label="Add New Item"
+        tools:layout="@layout/fragment_add_item"/>
 
 </navigation>
